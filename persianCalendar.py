@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # This is the implementation of Khayyam rules. year is an integer parameter.
 def isLeapYearReal(year):          
@@ -92,11 +92,12 @@ def FixedDate(year):
     else:
         return None           # There is no zero year!!
 
-    days = 1029983 * int( (realYear + 38) / 2820 ) # 1029983 is the total days of one 2820-year cycle
-    cycle = (realYear + 38) % 2820                 # cycle is (realYear + 38) mod 2820
+    cycle = (realYear + 38) % 2820                  # cycle is (realYear + 38) mod 2820
+    base = int( (realYear + 38) / 2820 )
+    if realYear + 38 < 0: base -= 1
+    days = 1029983 * base                           # 1029983 is the total days of one 2820-year cycle
     days += int((cycle - 38) * 365.24219) + 1
-    if cycle - 38 < 0:
-        days -= 1
+    if cycle - 38 < 0: days -= 1
     extra = cycle * 0.24219                         # 0.24219 ~ extra days of one year
     frac = int((extra - int(extra))*1000)           # frac is the fraction of extra days
     if isLeapYear(year - 1) and frac <= 202:        # 202 is a tuned parameter
@@ -109,10 +110,10 @@ def test():
     for year in range(1,2850):
         # check if the estimated function is the same as the real one
         if isLeapYear(year) != isLeapYearReal(year): 
-            print "wrong!!"
+            print("wrong!!")
 
         if FixedDate(year) != days:
-            print "wrong!!"
+            print("wrong!!")
 
         if isLeapYear(year):                         # add 366 days for leap years
             days += 366
@@ -122,7 +123,7 @@ def test():
     days = 1                                         # The first day of calendar, FARVARDIN 1, 1
     for year in range(-1,-2850,-1):                  # do the same for negative years
         if isLeapYear(year) != isLeapYearReal(year):
-            print "wrong!!"
+            print("wrong!!")
 
         if isLeapYear(year):
             days -= 366
@@ -130,6 +131,6 @@ def test():
             days -= 365
 
         if FixedDate(year) != days:
-            print "wrong!!"
+            print("wrong!!")
 
 test()
